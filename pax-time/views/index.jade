@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1.title= title
+  .intro
+    p.p Welcome to My PAX Badge Checker
+    p.p This works by asking "showclix.com", the usual PAX Badge provider, if there are any new PAX named events in their database. This is assuming a lot, but its another great way to get ahead of the "twitter" rush.
+    p
+      i.p Note: This page should auto-refresh
+  .container
+    .status 
+      p.p status
+    -if(data.length < 2)
+      .note.red 
+        p.state Not Yet
+        a(href="http://prime.paxsite.com/registration") Site Registration
+        a(href="http://www.showclix.com/event/"+data[0].event_id) ShowClix Link (Newest PAX Entry)
+    -else
+      .note.green 
+        p.state GET YOUR BADGES!
+        a(href="http://prime.paxsite.com/registration") Site Registration
+        a(href="#") ShowClix Link (Newest PAX Entry)
+
