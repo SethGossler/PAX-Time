@@ -1,3 +1,3 @@
 window.setTimeout(function(){
   location.reload();
-}, 10000000);
+}, 5000);
