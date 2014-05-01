@@ -1,10 +1,17 @@
+// Requires
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// I added these
+var getRequest = require("request");
+//Mongo stuff
+var MongoClient = require('mongodb').MongoClient;
 
+
+// Express setup
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -55,5 +62,31 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// Updating showclix data
+MongoClient.connect('mongodb://localhost/test', function(err, db) {
+    if(err) throw err;
+
+    console.log("Connected to Database");
+    
+    var paxTime = db.collection("paxtime");
+    var query = "PAX 2014";
+    var url = "http://api.showclix.com/Event/search?keyword="+query;
+
+    setInterval(function() {
+
+        getRequest({
+            url: url,
+            json: true
+        }, function(err, resp, data){
+            paxTime.save({_id:"0", data: data}, function(){
+                console.log("updated");
+            });
+
+        });
+
+    }, 3000);
+});
+
 
 module.exports = app;
+
